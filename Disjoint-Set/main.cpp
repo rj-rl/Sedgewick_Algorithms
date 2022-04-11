@@ -5,12 +5,20 @@
 
 #include <iostream>
 #include <utility>
+#include <cstring>
 #include "DisjointSet.h"
 
 using namespace std;
 
-int main()
+int main(int argc, char* argv[])
 {
+    // parse the arguments
+    bool print_intermediate = true;
+    if (argc > 1) {
+        //cout << argv[1] << '\n';
+        if (strcmp(argv[1], "no_print") == 0) print_intermediate = false;
+    }
+
     cout << "Enter the number of sites\n";
     size_t n = 0;
     cin >> n;
@@ -23,13 +31,17 @@ int main()
         if (!cin) break;
 
         if (set.connected(p, q)) {
-            cout << "sites " << p << " and " << q
-                << " are already connected\n";
+            if (print_intermediate) {
+                cout << "sites " << p << " and " << q
+                    << " are already connected\n";
+            }
             continue;
         }
         else {
             set.unify(p, q);
-            cout << "connected " << p << " and " << q << '\n';
+            if (print_intermediate) {
+                cout << "connected " << p << " and " << q << '\n';
+            }
         }
     }
     cout << "There's a total of " << set.count() << " components\n";

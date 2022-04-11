@@ -13,6 +13,23 @@ size_t DisjointSet::find(size_t p) const {
     return p;
 }
 
+size_t DisjointSet::find_with_compression(size_t p)
+{
+    // find the root, i.e. the component id for p
+    auto root = p;
+    while (id_[root] != root) {
+        root = id_[root];
+    }
+    // path compression: point all links on the way directly to component's root
+    // which reduces the tree's height
+    while (id_[p] != p) {
+        auto old_parent = id_[p];
+        id_[p] = root;
+        p = old_parent;
+    }
+    return p;
+}
+
 bool DisjointSet::connected(size_t p, size_t q) const {
     auto pID = find(p);
     auto qID = find(q);
@@ -20,8 +37,8 @@ bool DisjointSet::connected(size_t p, size_t q) const {
 }
 
 void DisjointSet::unify(size_t p, size_t q) {
-    auto pID = find(p);
-    auto qID = find(q);
+    auto pID = find_with_compression(p);
+    auto qID = find_with_compression(q);
     if (pID == qID) return;
 
     if (size_[pID] < size_[qID]) {

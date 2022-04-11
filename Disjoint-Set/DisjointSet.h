@@ -18,6 +18,8 @@ public:
     // returns component id for site 'p'
     std::size_t find(std::size_t p) const;
     // returns true if 'p' and 'q' are in the same component
+    std::size_t find_with_compression(std::size_t p);
+    // same as regular 'find' but compresses the path travelled
     bool        connected(std::size_t p, std::size_t q) const;
     // connects sites 'p' and 'q'
     void        unify(std::size_t p, std::size_t q);
